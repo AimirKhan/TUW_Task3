@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97ab08410fd49694c93d511b6e0eea29, type: 3}
+  m_Name: SlotItems
+  m_EditorClassIdentifier: Assembly-CSharp::TASK3.Scripts.Model.SO.SlotItemsModel
+  slotItems:
+  - Id: 0
+    Name: Strawberry
+    Image: {fileID: 21300000, guid: 197b44878f568c446be7ce99b572c6e2, type: 3}
+  - Id: 1
+    Name: Avocado
+    Image: {fileID: 21300000, guid: 09805206295501c4aa9e710d5bd701a5, type: 3}
+  - Id: 2
+    Name: Lemon
+    Image: {fileID: 21300000, guid: 0534288c23a17454fa69c9ddbd47c13a, type: 3}
+  - Id: 3
+    Name: Orange
+    Image: {fileID: 21300000, guid: a458ebecdde9ccc4e966c8c5ddba114d, type: 3}
+  - Id: 4
+    Name: Watermelon
+    Image: {fileID: 21300000, guid: 1f1e64a259e616a4ca26c7582118ea3b, type: 3}
