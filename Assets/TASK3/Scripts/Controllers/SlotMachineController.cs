@@ -20,12 +20,26 @@ namespace TASK3.Scripts.Controllers
         {
             slotItemsSo.SlotItems.ForEach(item =>
             {
+                InstantiateNewItems(item);
+            });
+            if (slotItemsSo.SlotItems.Capacity >= 2)
+            {
+                for (int index = 0; index < 2; index++)
+                {
+                    InstantiateNewItems(slotItemsSo.SlotItems[index]);
+                }
+            }
+            
+            Model.Add("SlotItems", slotItems);
+            return;
+            
+            void InstantiateNewItems(SlotItem itemContext)
+            {
                 var newSlotItem = Instantiate(view.SlotItemPrefab, view.ItemsContainer);
-                newSlotItem.SlotItem = item;
+                newSlotItem.SlotItem = itemContext;
                 newSlotItem.Init();
                 slotItems.Add(newSlotItem);
-            });
-            Model.Add("SlotItems", slotItems);
+            }
         }
 
         [Bind("SetWinItem")]

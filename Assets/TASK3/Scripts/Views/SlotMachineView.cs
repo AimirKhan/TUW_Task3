@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using AxGrid;
 using AxGrid.Base;
 using AxGrid.Model;
@@ -10,51 +12,81 @@ namespace TASK3.Scripts.Views
     {
         [SerializeField] private RectTransform itemsContainer;
         [SerializeField] private SlotItemView slotItemPrefab;
+        [SerializeField] private ParticleSystem winParticleSystem;
         
         public RectTransform ItemsContainer => itemsContainer;
         public SlotItemView SlotItemPrefab => slotItemPrefab;
         
         [Header("Animation values")]
-        [SerializeField] private float speed = 3000f;
+        [SerializeField] private float maxVelocity = 3000f;
         [SerializeField] private float timeToStop = 3f;
         
         private bool isMoving;
-        private float velocity;
+        private float currentVelocity;
         private Vector2 startPosition;
         private float elementHeight;
-        private int targetWinId;
+        private List<SlotItemView> totalItems;
+        private SlotItemView winSlotItem;
+        private int totalUniqueItems;
+        private float fullCycleHeight;
 
         [OnAwake]
         private void OnAwake()
         {
             elementHeight = itemsContainer.rect.size.y;
         }
+
+        [OnStart]
+        private void OnStart()
+        {
+            try
+            {
+                totalItems = Model.Get("SlotItems") as List<SlotItemView>;
+                totalUniqueItems = totalItems.Count - 2;
+                fullCycleHeight = elementHeight * totalUniqueItems;
+            }
+            catch
+            {
+                Log.Error("Model.Get SlotItems Slot items are empty");
+                throw;
+            }
+        }
         
         [Bind("RollItems")]
-        private void RollItems()
+        private void StartRollItems()
         {
             isMoving = true;
             Path = new CPath()
-                .EasingCubicEaseIn(1f, 0f, speed, f => velocity = f);
+                .EasingCubicEaseIn(1f, 0f, maxVelocity, v => currentVelocity = v);
         }
 
         [Bind("StopRollItems")]
         private void StopRollItems()
         {
-            
             isMoving = false;
-            var currentSibling = Model.Get("WinItem") as SlotItemView;
-            //var currentSiblingIndex = currentSibling.transform.GetSiblingIndex();
-            var currentSiblingIndex = currentSibling.SlotItem.Id ;
-            Debug.Log("Current sibling index" + currentSiblingIndex);
+            var targetWinId = 0;
+            try
+            {
+                winSlotItem = Model.Get("WinItem") as SlotItemView;
+                targetWinId = winSlotItem.SlotItem.Id;
+            }
+            catch
+            {
+                Log.Error("Model.Get WinItem Slot items are empty");
+                throw;
+            }
             
-            var currentY = itemsContainer.anchoredPosition.y;
-            var toReset = elementHeight - currentY;
-            var totalDistance = toReset + (currentSiblingIndex * elementHeight) + (elementHeight * 5 * 2);
+            var currentY = itemsContainer.anchoredPosition.y % fullCycleHeight;
+            if (currentY < 0) currentY += fullCycleHeight;
             
-            var timeToStop = (3f * totalDistance) / velocity;
+            var targetDestinationY = targetWinId * elementHeight;
             
-            if (timeToStop < 1.2f) timeToStop = 1.2f;
+            var distanceToTarget = targetDestinationY - currentY;
+            if (distanceToTarget <= 0) distanceToTarget += fullCycleHeight;
+            
+            var totalDistance = distanceToTarget + (fullCycleHeight * 2);
+            
+            var timeToStop = (3f * totalDistance) / currentVelocity;
             
             var lastF = 0f;
             
@@ -63,16 +95,11 @@ namespace TASK3.Scripts.Views
                 {
                     var delta = f - lastF;
                     lastF = f;
-
+                    
                     var position = itemsContainer.anchoredPosition;
                     position.y += delta;
+                    position.y %= fullCycleHeight;
                     itemsContainer.anchoredPosition = position;
-
-                    if (itemsContainer.anchoredPosition.y >= elementHeight)
-                    {
-                        itemsContainer.anchoredPosition -= new Vector2(0, elementHeight);
-                        itemsContainer.GetChild(0).SetAsLastSibling();
-                    }
                 })
                 .Action(() =>
                 {
@@ -86,26 +113,19 @@ namespace TASK3.Scripts.Views
             if (isMoving)
             {
                 var position = itemsContainer.anchoredPosition;
-                position.y += velocity * Time.deltaTime;
+                position.y += currentVelocity * Time.deltaTime;
                 itemsContainer.anchoredPosition = position;
-
-                if (itemsContainer.anchoredPosition.y >= elementHeight)
-                {
-                    itemsContainer.anchoredPosition -= new Vector2(0, elementHeight);
-                    if (itemsContainer.childCount > 0)
-                    {
-                        itemsContainer.GetChild(0).SetAsLastSibling();
-                    }
-                }
+                
+                position.y %= fullCycleHeight;
+                
+                itemsContainer.anchoredPosition = position;
             }
         }
-        
-        void OnGUI()
+        [Bind("PlayWinAnim")]
+        private void PlayWinAnimation()
         {
-            if (GUI.Button(new Rect(20, 20, 250, 100), "Show current state"))
-            {
-                Log.Info("Current state is " + Settings.Fsm.CurrentStateName);
-            }
+            winParticleSystem.textureSheetAnimation.SetSprite(0, winSlotItem.SlotItem.Image);
+            winParticleSystem.Play();
         }
     }
 }

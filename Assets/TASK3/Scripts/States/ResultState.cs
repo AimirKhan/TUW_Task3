@@ -10,10 +10,10 @@ namespace TASK3.Scripts.States
         public void Enter()
         {
             Log.Debug("Enter result state");
+            Model.EventManager.Invoke("PlayWinAnim");
         }
-    
         
-        [One(3)]
+        [One(1)]
         public void AnimationTimer()
         {
             Log.Debug("Show result");

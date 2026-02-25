@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: a458ebecdde9ccc4e966c8c5ddba114d
+guid: e3c80221a0ed0a44baa28c283fa4dfdb
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4121880872312635667
-    second: Orange_0
+      213: 5199979006384268662
+    second: Star_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -74,7 +74,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
+    textureFormat: -1
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Orange_0
+      name: Star_0
       rect:
         serializedVersion: 2
-        x: 127
-        y: 0
-        width: 801
-        height: 932
+        x: 20
+        y: 7
+        width: 216
+        height: 242
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3110ca090dcd33930800000000000000
-      internalID: 4121880872312635667
+      spriteID: 675e50b0b590a2840800000000000000
+      internalID: 5199979006384268662
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Orange_0: 4121880872312635667
+      Star_0: 5199979006384268662
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
